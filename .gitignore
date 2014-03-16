@@ -1,3 +1,6 @@
 # Aptana stuff
 .project
 .pydevproject
+
+# Python compiled files
+*.pyc
