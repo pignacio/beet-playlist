@@ -42,11 +42,13 @@ def add(playlist, query):
             print track
         logging.error("More than one track matched")
         sys.exit(1)
+    else:
+        tracks_to_add = tracks
 
-    track = tracks[0]
-    print "Matched: %s" % track
-    size = len(get_playlist_contents(playlist))
-    fname_bits = ["%06d" % (size + 1), track.artist, track.album, track.title]
-    fname = "-".join(fname_bit.replace(" ", "_") for fname_bit in fname_bits)
-    dest = os.path.join(get_playlist_dir(playlist), fname)
-    os.link(track.path, dest)
+    for track in tracks_to_add:
+        print "Adding: %s" % track
+        size = len(get_playlist_contents(playlist))
+        fname_bits = ["%06d" % (size + 1), track.artist, track.album, track.title]
+        fname = "-".join(fname_bit.replace(" ", "_") for fname_bit in fname_bits)
+        dest = os.path.join(get_playlist_dir(playlist), fname)
+        os.link(track.path, dest)
