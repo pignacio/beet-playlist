@@ -28,6 +28,15 @@ def _run_beet_query(query):
     proc.wait()
     return [BeetTrack(*line.rstrip('\n').split("\t")) for line in lines]
 
+def _add(playlist, tracks):
+    for track in tracks:
+        print "Adding: %s" % track
+        size = len(get_playlist_contents(playlist))
+        fname_bits = ["%06d" % (size + 1), track.artist, track.album, track.title]
+        fname = "-".join(fname_bit.replace(" ", "_") for fname_bit in fname_bits)
+        dest = os.path.join(get_playlist_dir(playlist), fname)
+        os.link(track.path, dest)
+
 def add(playlist, query):
     print "add(%s), query: '%s'" % (playlist, query)
     check_playlist(playlist)
@@ -45,10 +54,4 @@ def add(playlist, query):
     else:
         tracks_to_add = tracks
 
-    for track in tracks_to_add:
-        print "Adding: %s" % track
-        size = len(get_playlist_contents(playlist))
-        fname_bits = ["%06d" % (size + 1), track.artist, track.album, track.title]
-        fname = "-".join(fname_bit.replace(" ", "_") for fname_bit in fname_bits)
-        dest = os.path.join(get_playlist_dir(playlist), fname)
-        os.link(track.path, dest)
+    _add(playlist, tracks_to_add)
