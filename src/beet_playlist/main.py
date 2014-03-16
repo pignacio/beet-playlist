@@ -74,8 +74,8 @@ def list_(playlist):
 def add(playlist, query):
     print "add(%s), query: '%s'" % (playlist, query)
     _check_playlist(playlist)
-    format = '$artist\t$album\t$title\t$path'
-    proc = subprocess.Popen(['beet', 'list', '-f', format] + query, stdout=subprocess.PIPE)
+    beet_format = '$artist\t$album\t$title\t$path'
+    proc = subprocess.Popen(['beet', 'list', '-f', beet_format] + query, stdout=subprocess.PIPE)
     lines = proc.stdout.readlines()
     proc.wait()
     if len(lines) == 0:
