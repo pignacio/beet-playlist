@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
-from beet_playlist.add import add
-from beet_playlist.common import PLAYLISTS_DIR, is_playlist, PLAYLISTS_DATA_FILE, \
+from add import add
+from common import PLAYLISTS_DIR, is_playlist, PLAYLISTS_DATA_FILE, \
     get_playlist_contents, check_playlist, get_playlist_dir
 import logging
 import os

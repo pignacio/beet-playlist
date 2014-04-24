@@ -3,7 +3,7 @@ Created on Mar 16, 2014
 
 @author: ignacio
 '''
-from beet_playlist.common import check_playlist, get_playlist_contents, \
+from common import check_playlist, get_playlist_contents, \
     get_playlist_dir
 import logging
 import os
