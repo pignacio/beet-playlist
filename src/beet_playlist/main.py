@@ -1,20 +1,23 @@
 from argparse import ArgumentParser
-from common import add_parsers, PLAYLISTS_DIR
+import common
 import add
 import logging
 import os
 import sys
+from beets_api import run_beet_query
+import subprocess
 
 def _get_arg_parser():
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(dest='subparser')
-    add_parsers(subparsers)
+    common.add_parsers(subparsers)
     add.add_parser(subparsers)
+    add_parsers(subparsers)
     return parser
 
 def _init_playlists_dir():
-    if not os.path.isdir(PLAYLISTS_DIR):
-        os.makedirs(PLAYLISTS_DIR)
+    if not os.path.isdir(common.PLAYLISTS_DIR):
+        os.makedirs(common.PLAYLISTS_DIR)
 
 def _extract_from_options(key, options):
     res = getattr(options, key)
@@ -35,6 +38,20 @@ def main():
     _init_playlists_dir()
     func(**options.__dict__)
 
+
+def add_parsers(subparsers):
+    parser = subparsers.add_parser("play_query")
+    parser.add_argument('query', nargs="*",
+                         help='beets query to play')
+    parser.set_defaults(func=play_beets_query)
+
+def play_beets_query(query):
+    tracks = run_beet_query(query)
+    logging.info("Got %s tracks from query '%s'", len(tracks), query)
+    for track in tracks:
+        logging.info(" - %s", track.path)
+    command = ['mplayer'] + [t.path for t in tracks]
+    subprocess.call(command)
 
 if __name__ == "__main__":
     main()
