@@ -5,27 +5,11 @@ Created on Mar 16, 2014
 '''
 import logging
 import os
-import subprocess
 import sys
 from common import Playlist
-
-class BeetTrack():
-    def __init__(self, artist, album, title, path):
-        self.artist = artist
-        self.album = album
-        self.title = title
-        self.path = path
-
-    def __str__(self):
-        return " - ".join([self.artist, self.album, self.title])
+from beets_api import run_beet_query
 
 
-def _run_beet_query(query):
-    beet_format = '$artist\t$album\t$title\t$path'
-    proc = subprocess.Popen(['beet', 'list', '-f', beet_format] + query, stdout=subprocess.PIPE)
-    lines = proc.stdout.readlines()
-    proc.wait()
-    return [BeetTrack(*line.rstrip('\n').split("\t")) for line in lines]
 
 def _add(playlist, tracks):
     print "Adding %s tracks to %s" % (len(tracks), playlist)
@@ -108,7 +92,7 @@ def _interactive_select(tracks):
 
 def add(playlist, query):
     print "add(%s), query: '%s'" % (playlist, query)
-    tracks = _run_beet_query(query)
+    tracks = run_beet_query(query)
 
     if len(tracks) == 0:
         logging.error("No tracks matched")
