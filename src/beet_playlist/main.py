@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from common import add_parsers, PLAYLISTS_DIR
+import common
 import add
 import logging
 import os
@@ -8,13 +8,13 @@ import sys
 def _get_arg_parser():
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(dest='subparser')
-    add_parsers(subparsers)
+    common.add_parsers(subparsers)
     add.add_parser(subparsers)
     return parser
 
 def _init_playlists_dir():
-    if not os.path.isdir(PLAYLISTS_DIR):
-        os.makedirs(PLAYLISTS_DIR)
+    if not os.path.isdir(common.PLAYLISTS_DIR):
+        os.makedirs(common.PLAYLISTS_DIR)
 
 def _extract_from_options(key, options):
     res = getattr(options, key)
