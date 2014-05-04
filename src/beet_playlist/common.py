@@ -26,3 +26,16 @@ def check_playlist(playlist):
     elif not is_playlist(playlist):
         logging.error("Invalid playlist '%s'", playlist)
         sys.exit(1)
+
+class Playlist():
+    def __init__(self, playlist):
+        self._path = get_playlist_dir(playlist)
+        if not os.path.isdir(self._path):
+            raise ValueError("'{}' is not a valid playlist".format(playlist))
+
+    @property
+    def path(self):
+        return self._path
+
+    def contents(self):
+        return sorted(os.listdir(self._path))
