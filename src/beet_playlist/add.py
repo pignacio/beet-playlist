@@ -3,12 +3,11 @@ Created on Mar 16, 2014
 
 @author: ignacio
 '''
-from common import check_playlist, get_playlist_contents, \
-    get_playlist_dir
 import logging
 import os
 import subprocess
 import sys
+from common import Playlist
 
 class BeetTrack():
     def __init__(self, artist, album, title, path):
@@ -32,10 +31,10 @@ def _add(playlist, tracks):
     print "Adding %s tracks to %s" % (len(tracks), playlist)
     for track in tracks:
         print "Adding: %s" % track
-        size = len(get_playlist_contents(playlist))
+        size = len(playlist.contents())
         fname_bits = ["%06d" % (size + 1), track.artist, track.album, track.title]
         fname = "-".join(fname_bit.replace(" ", "_") for fname_bit in fname_bits)
-        dest = os.path.join(get_playlist_dir(playlist), fname)
+        dest = os.path.join(playlist.path, fname)
         os.link(track.path, dest)
 
 def _parse_and_check(str_value, limit):
@@ -109,8 +108,6 @@ def _interactive_select(tracks):
 
 def add(playlist, query):
     print "add(%s), query: '%s'" % (playlist, query)
-    check_playlist(playlist)
-
     tracks = _run_beet_query(query)
 
     if len(tracks) == 0:
@@ -120,3 +117,12 @@ def add(playlist, query):
         tracks_to_add = _interactive_select(tracks)
 
     _add(playlist, tracks_to_add)
+
+def add_parser(subparsers):
+    parser = subparsers.add_parser("add")
+    parser.add_argument("playlist", action='store', type=Playlist,
+                        help='Playlist to add songs to')
+    parser.add_argument('query', nargs="*",
+                         help='beets query to add on')
+
+    parser.set_defaults(func=add)
