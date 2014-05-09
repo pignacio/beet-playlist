@@ -42,15 +42,17 @@ def main():
 def add_parsers(subparsers):
     parser = subparsers.add_parser("play_query")
     parser.add_argument('query', nargs="*",
-                         help='beets query to play')
+                        help='beets query to play')
+    parser.add_argument('--shuffle', action='store_true', default=False,
+                        help='')
     parser.set_defaults(func=play_beets_query)
 
-def play_beets_query(query):
+def play_beets_query(query, shuffle=False):
     tracks = run_beet_query(query)
     logging.info("Got %s tracks from query '%s'", len(tracks), query)
     for track in tracks:
         logging.info(" - %s", track.path)
-    common.mplayer([t.path for t in tracks])
+    common.mplayer([t.path for t in tracks], shuffle=shuffle)
 
 if __name__ == "__main__":
     main()
