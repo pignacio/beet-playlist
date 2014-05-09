@@ -31,9 +31,9 @@ class Playlist():
     def contents(self):
         return sorted(os.listdir(self._path))
 
-    def play(self):
+    def play(self, shuffle=False):
         paths = [os.path.join(self.path, c) for c in self.contents()]
-        mplayer(paths)
+        mplayer(paths, shuffle=shuffle)
 
     @classmethod
     def _get_playlist_dir(cls, playlist):
@@ -89,7 +89,12 @@ def add_play_parser(subparsers):
     parser = subparsers.add_parser("play")
     parser.add_argument("playlist", action='store', type=Playlist, default=None,
                         help='Play given playtlist')
-    parser.set_defaults(func=lambda playlist: Playlist.play(playlist))
+    parser.add_argument("--shuffle", action='store_true', default=False,
+                        help='Shuffle the playlist')
+    parser.set_defaults(func=play)
+
+def play(playlist, shuffle):
+    playlist.play(shuffle=shuffle)
 
 def mplayer(paths, shuffle=False):
     command = ['mplayer']
