@@ -50,8 +50,7 @@ def play_beets_query(query):
     logging.info("Got %s tracks from query '%s'", len(tracks), query)
     for track in tracks:
         logging.info(" - %s", track.path)
-    command = ['mplayer'] + [t.path for t in tracks]
-    subprocess.call(command)
+    common.mplayer([t.path for t in tracks])
 
 if __name__ == "__main__":
     main()
