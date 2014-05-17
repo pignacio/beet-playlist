@@ -49,6 +49,9 @@ def add_parsers(subparsers):
 
 def play_beets_query(query, shuffle=False):
     tracks = run_beet_query(query)
+    if not tracks:
+        logging.warn("Query '{}' matched no tracks!".format(query))
+        return
     logging.info("Got %s tracks from query '%s'", len(tracks), query)
     for track in tracks:
         logging.info(" - %s", track.path)
