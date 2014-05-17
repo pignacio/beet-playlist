@@ -33,7 +33,10 @@ class Playlist():
 
     def play(self, shuffle=False):
         paths = [os.path.join(self.path, c) for c in self.contents()]
-        mplayer(paths, shuffle=shuffle)
+        if paths:
+            mplayer(paths, shuffle=shuffle)
+        else:
+            logging.warn("Playlist {} is empty. Not playing".format(self.name))
 
     @classmethod
     def _get_playlist_dir(cls, playlist):
@@ -97,6 +100,8 @@ def play(playlist, shuffle):
     playlist.play(shuffle=shuffle)
 
 def mplayer(paths, shuffle=False):
+    if not paths:
+        raise ValueError("No paths supplied to mplayer")
     command = ['mplayer']
     if shuffle:
         command.append("--shuffle")
