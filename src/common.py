@@ -14,6 +14,7 @@ PLAYLISTS_DIR = os.path.join(DATA_DIR, ".playlists")
 
 
 class Playlist():
+
     def __init__(self, playlist):
         if playlist is None:
             raise ValueError("Must supply a playlist")
@@ -64,6 +65,7 @@ class Playlist():
         return [cls(playlist)
                 for playlist in sorted(os.listdir(PLAYLISTS_DIR))]
 
+
 def list_playlists(playlist):
     if playlist is None:
         for playlist in Playlist.list():
@@ -74,10 +76,12 @@ def list_playlists(playlist):
         for track in contents:
             print " - %s" % track
 
+
 def add_parsers(subparsers):
     add_new_parser(subparsers)
     add_list_parser(subparsers)
     add_play_parser(subparsers)
+
 
 def add_new_parser(subparsers):
     parser = subparsers.add_parser("new")
@@ -85,22 +89,28 @@ def add_new_parser(subparsers):
                         help='Crate a new playlist')
     parser.set_defaults(func=Playlist.create)
 
+
 def add_list_parser(subparsers):
     parser = subparsers.add_parser("list")
-    parser.add_argument("playlist", action='store', type=Playlist, default=None,
-                        nargs='?', help='List all or given playlist')
+    parser.add_argument("playlist", action='store', type=Playlist,
+                        default=None, nargs='?',
+                        help='List all or given playlist')
     parser.set_defaults(func=list_playlists)
+
 
 def add_play_parser(subparsers):
     parser = subparsers.add_parser("play")
-    parser.add_argument("playlist", action='store', type=Playlist, default=None,
+    parser.add_argument("playlist", action='store', type=Playlist,
+                        default=None,
                         help='Play given playtlist')
     parser.add_argument("--shuffle", action='store_true', default=False,
                         help='Shuffle the playlist')
     parser.set_defaults(func=play)
 
+
 def play(playlist, shuffle):
     playlist.play(shuffle=shuffle)
+
 
 def mplayer(paths, shuffle=False):
     if not paths:
@@ -110,4 +120,3 @@ def mplayer(paths, shuffle=False):
         command.append("--shuffle")
     command.extend(paths)
     subprocess.call(command)
-
