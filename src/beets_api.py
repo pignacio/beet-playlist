@@ -6,7 +6,7 @@ Created on May 4, 2014
 import subprocess
 
 
-class BeetTrack():
+class BeetTrack(object):
 
     def __init__(self, artist, album, title, path):
         self.artist = artist

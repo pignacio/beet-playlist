@@ -13,7 +13,7 @@ DATA_FILE = os.path.join(DATA_DIR, ".playlists_data")
 PLAYLISTS_DIR = os.path.join(DATA_DIR, ".playlists")
 
 
-class Playlist():
+class Playlist(object):
 
     def __init__(self, playlist):
         if playlist is None:
@@ -85,31 +85,31 @@ def _get_playlist_subparser(subparsers, name, **kwargs):
 
 
 def add_parsers(subparsers):
-    add_new_parser(subparsers)
-    add_list_parser(subparsers)
-    add_play_parser(subparsers)
+    _add_new_parser(subparsers)
+    _add_list_parser(subparsers)
+    _add_play_parser(subparsers)
     _add_rm_parser(subparsers)
 
 
-def add_new_parser(subparsers):
+def _add_new_parser(subparsers):
     parser = subparsers.add_parser("new")
     parser.add_argument("playlist", action='store',
                         help='Crate a new playlist')
     parser.set_defaults(func=Playlist.create)
 
 
-def add_list_parser(subparsers):
+def _add_list_parser(subparsers):
     parser = _get_playlist_subparser(subparsers, "list", nargs='?',
                                      help='List this playlist contents')
     parser.set_defaults(func=list_playlists)
 
 
-def add_play_parser(subparsers):
+def _add_play_parser(subparsers):
     parser = _get_playlist_subparser(subparsers, "play",
                                      help='PLaylist to play')
     parser.add_argument("--shuffle", action='store_true', default=False,
                         help='Shuffle the playlist')
-    parser.set_defaults(func=play)
+    parser.set_defaults(func=_play)
 
 
 def _add_rm_parser(subparsers):
@@ -118,12 +118,12 @@ def _add_rm_parser(subparsers):
     parser.set_defaults(func=_rm_playlist)
 
 
-def play(playlist, shuffle):
+def _play(playlist, shuffle):
     playlist.play(shuffle=shuffle)
 
 
 def _rm_playlist(playlist):
-    logging.info("Removing playlist '%s'" % playlist.name)
+    logging.info("Removing playlist '%s'", playlist.name)
     os.removedirs(playlist.path)
     logging.info("Removed")
 
