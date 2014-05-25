@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 from beets_api import run_beet_query
-import subprocess
+
 
 def _get_arg_parser():
     parser = ArgumentParser()
@@ -15,14 +15,17 @@ def _get_arg_parser():
     add_parsers(subparsers)
     return parser
 
+
 def _init_playlists_dir():
     if not os.path.isdir(common.PLAYLISTS_DIR):
         os.makedirs(common.PLAYLISTS_DIR)
+
 
 def _extract_from_options(key, options):
     res = getattr(options, key)
     delattr(options, key)
     return res
+
 
 def main():
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -34,7 +37,8 @@ def main():
     try:
         func = _extract_from_options("func", options)
     except AttributeError:
-        raise Exception("Missing 'func' attribute. Maybe subparser '{}' didnt correctly set_defaults()?".format(subparser))
+        raise Exception("Missing 'func' attribute. Maybe subparser '{}' didnt "
+                        "correctly set_defaults()?".format(subparser))
     _init_playlists_dir()
     func(**options.__dict__)
 
@@ -46,6 +50,7 @@ def add_parsers(subparsers):
     parser.add_argument('--shuffle', action='store_true', default=False,
                         help='')
     parser.set_defaults(func=play_beets_query)
+
 
 def play_beets_query(query, shuffle=False):
     tracks = run_beet_query(query)

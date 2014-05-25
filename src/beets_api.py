@@ -5,7 +5,9 @@ Created on May 4, 2014
 '''
 import subprocess
 
+
 class BeetTrack():
+
     def __init__(self, artist, album, title, path):
         self.artist = artist
         self.album = album
@@ -18,7 +20,8 @@ class BeetTrack():
 
 def run_beet_query(query):
     beet_format = '$artist\t$album\t$title\t$path'
-    proc = subprocess.Popen(['beet', 'list', '-f', beet_format] + query, stdout=subprocess.PIPE)
+    proc = subprocess.Popen(['beet', 'list', '-f', beet_format] + query,
+                            stdout=subprocess.PIPE)
     lines = proc.stdout.readlines()
     proc.wait()
     return [BeetTrack(*line.rstrip('\n').split("\t")) for line in lines]
