@@ -77,10 +77,18 @@ def list_playlists(playlist):
             print " - %s" % track
 
 
+def _get_playlist_subparser(subparsers, name, **kwargs):
+    parser = subparsers.add_parser(name)
+    parser.add_argument("playlist", action='store', type=Playlist,
+                        default=None, **kwargs)
+    return parser
+
+
 def add_parsers(subparsers):
     add_new_parser(subparsers)
     add_list_parser(subparsers)
     add_play_parser(subparsers)
+    _add_rm_parser(subparsers)
 
 
 def add_new_parser(subparsers):
@@ -91,25 +99,33 @@ def add_new_parser(subparsers):
 
 
 def add_list_parser(subparsers):
-    parser = subparsers.add_parser("list")
-    parser.add_argument("playlist", action='store', type=Playlist,
-                        default=None, nargs='?',
-                        help='List all or given playlist')
+    parser = _get_playlist_subparser(subparsers, "list", nargs='?',
+                                     help='List this playlist contents')
     parser.set_defaults(func=list_playlists)
 
 
 def add_play_parser(subparsers):
-    parser = subparsers.add_parser("play")
-    parser.add_argument("playlist", action='store', type=Playlist,
-                        default=None,
-                        help='Play given playtlist')
+    parser = _get_playlist_subparser(subparsers, "play",
+                                     help='PLaylist to play')
     parser.add_argument("--shuffle", action='store_true', default=False,
                         help='Shuffle the playlist')
     parser.set_defaults(func=play)
 
 
+def _add_rm_parser(subparsers):
+    parser = _get_playlist_subparser(subparsers, "rm",
+                                     help='Playlist to remove')
+    parser.set_defaults(func=_rm_playlist)
+
+
 def play(playlist, shuffle):
     playlist.play(shuffle=shuffle)
+
+
+def _rm_playlist(playlist):
+    logging.info("Removing playlist '%s'" % playlist.name)
+    os.removedirs(playlist.path)
+    logging.info("Removed")
 
 
 def mplayer(paths, shuffle=False):
