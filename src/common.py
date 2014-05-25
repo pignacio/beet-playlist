@@ -13,7 +13,7 @@ DATA_FILE = os.path.join(DATA_DIR, ".playlists_data")
 PLAYLISTS_DIR = os.path.join(DATA_DIR, ".playlists")
 
 
-class Playlist():
+class Playlist(object):
 
     def __init__(self, playlist):
         if playlist is None:
@@ -123,7 +123,7 @@ def _play(playlist, shuffle):
 
 
 def _rm_playlist(playlist):
-    logging.info("Removing playlist '%s'" % playlist.name)
+    logging.info("Removing playlist '%s'", playlist.name)
     os.removedirs(playlist.path)
     logging.info("Removed")
 

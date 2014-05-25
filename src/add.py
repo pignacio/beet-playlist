@@ -47,7 +47,7 @@ def _parse_indexes(selection, limit):
         for rang in ranges:
             try:
                 res += _parse_range(rang, limit)
-            except Exception:
+            except ValueError:
                 logging.exception("Problems parsing '%s'", rang)
                 return None
     return res
