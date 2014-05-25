@@ -7,8 +7,10 @@ import logging
 import os
 import subprocess
 
-PLAYLISTS_DIR = "/home/ignacio/Music/.playlists"
-PLAYLISTS_DATA_FILE = ".playlists_data"
+
+DATA_DIR = os.path.join(os.path.expanduser("~"), ".beet-playlist")
+DATA_FILE = os.path.join(DATA_DIR, ".playlists_data")
+PLAYLISTS_DIR = os.path.join(DATA_DIR, ".playlists")
 
 
 class Playlist():
@@ -59,7 +61,8 @@ class Playlist():
 
     @classmethod
     def list(cls):
-        return [cls(playlist) for playlist in sorted(os.listdir(PLAYLISTS_DIR)) if playlist != PLAYLISTS_DATA_FILE]
+        return [cls(playlist)
+                for playlist in sorted(os.listdir(PLAYLISTS_DIR))]
 
 def list_playlists(playlist):
     if playlist is None:
