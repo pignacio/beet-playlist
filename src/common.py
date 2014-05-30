@@ -6,11 +6,14 @@ Created on Mar 16, 2014
 import logging
 import os
 import subprocess
+import yaml
 
 
 DATA_DIR = os.path.join(os.path.expanduser("~"), ".beet-playlist")
-DATA_FILE = os.path.join(DATA_DIR, ".playlists_data")
-PLAYLISTS_DIR = os.path.join(DATA_DIR, ".playlists")
+DATA_FILE = os.path.join(DATA_DIR, "data")
+PLAYLISTS_DIR = os.path.join(DATA_DIR, "playlists")
+
+HISTORY_LIMIT = 20
 
 
 class Playlist(object):
@@ -126,6 +129,41 @@ def _rm_playlist(playlist):
     logging.info("Removing playlist '%s'", playlist.name)
     os.removedirs(playlist.path)
     logging.info("Removed")
+
+
+class _ConfigData(object):
+    _INSTANCE = None
+
+    def __init__(self, history):
+        self.history = history
+
+    def save(self):
+        with open(DATA_FILE, "w") as fout:
+            yaml.dump(self.__dict__, fout)
+
+    @classmethod
+    def get(cls):
+        if cls._INSTANCE is None:
+            cls._INSTANCE = cls._load()
+        return cls._INSTANCE or cls._default()
+
+    @classmethod
+    def _load(cls):
+        try:
+            with open(DATA_FILE) as fin:
+                return cls(**yaml.load(fin.read()))
+        except (ValueError, IOError):
+            return None
+
+    @classmethod
+    def _default(cls):
+        return cls(
+            history=[],
+        )
+
+
+def get_config():
+    return _ConfigData.get()
 
 
 def mplayer(paths, shuffle=False):
