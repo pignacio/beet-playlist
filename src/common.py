@@ -7,6 +7,7 @@ import logging
 import os
 import subprocess
 import yaml
+import time
 
 
 DATA_DIR = os.path.join(os.path.expanduser("~"), ".beet-playlist")
@@ -37,10 +38,10 @@ class Playlist(object):
     def contents(self):
         return sorted(os.listdir(self._path))
 
-    def play(self, shuffle=False):
+    def play(self, shuffle=False, repeat=False):
         paths = [os.path.join(self.path, c) for c in self.contents()]
         if paths:
-            mplayer(paths, shuffle=shuffle)
+            mplayer(paths, shuffle=shuffle, repeat=repeat)
         else:
             logging.warn("Playlist {} is empty. Not playing".format(self.name))
 
@@ -112,6 +113,8 @@ def _add_play_parser(subparsers):
                                      help='PLaylist to play')
     parser.add_argument("--shuffle", action='store_true', default=False,
                         help='Shuffle the playlist')
+    parser.add_argument("--repeat", action='store_true', default=False,
+                        help='Infinite replay the playlist')
     parser.set_defaults(func=_play)
 
 
@@ -121,8 +124,8 @@ def _add_rm_parser(subparsers):
     parser.set_defaults(func=_rm_playlist)
 
 
-def _play(playlist, shuffle):
-    playlist.play(shuffle=shuffle)
+def _play(playlist, shuffle, repeat):
+    playlist.play(shuffle=shuffle, repeat=repeat)
 
 
 def _rm_playlist(playlist):
@@ -166,11 +169,15 @@ def get_config():
     return _ConfigData.get()
 
 
-def mplayer(paths, shuffle=False):
+def mplayer(paths, shuffle=False, repeat=False):
     if not paths:
         raise ValueError("No paths supplied to mplayer")
     command = ['mplayer']
     if shuffle:
         command.append("--shuffle")
     command.extend(paths)
-    subprocess.call(command)
+    while True:
+        subprocess.call(command)
+        if not repeat:
+            break
+        time.sleep(1)
