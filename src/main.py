@@ -52,10 +52,12 @@ def add_parsers(subparsers):
                         help='Shuffles the query contents')
     parser.add_argument('--history', action='store_true', default=False,
                         help='Shows last played queries')
+    parser.add_argument('--repeat', action='store_true', default=False,
+                        help='Replays the playlist once its finished')
     parser.set_defaults(func=play_beets_query)
 
 
-def play_beets_query(query, shuffle=False, history=False):
+def play_beets_query(query, shuffle=False, history=False, repeat=False):
     if history and not query:
         _show_history()
     else:
@@ -73,7 +75,8 @@ def play_beets_query(query, shuffle=False, history=False):
         for track in tracks:
             logging.info(" - %s", track.path)
         _push_to_history(query, shuffle)
-        common.mplayer([t.path for t in tracks], shuffle=shuffle)
+        common.mplayer([t.path for t in tracks], shuffle=shuffle,
+                       repeat=repeat)
 
 
 def _push_to_history(query, shuffle):
