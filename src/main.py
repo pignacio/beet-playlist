@@ -104,7 +104,7 @@ def _fetch_history_query(query, shuffle):
 
     history_shuffle = (history_query[-1] == _SHUFFLE_TOKEN)
     if history_shuffle:
-        history_query.remove(_SHUFFLE_TOKEN)
+        history_query = [q for q in history_query if q != _SHUFFLE_TOKEN]
     return history_query, shuffle or history_shuffle
 
 
