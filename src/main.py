@@ -7,6 +7,8 @@ import sys
 from beets_api import run_beet_query
 from common import get_config, HISTORY_LIMIT
 
+_SHUFFLE_TOKEN = "<SHUFFLED>"
+
 
 def _get_arg_parser():
     parser = ArgumentParser()
@@ -82,7 +84,7 @@ def play_beets_query(query, shuffle=False, history=False, repeat=False):
 def _push_to_history(query, shuffle):
     config = get_config()
     if shuffle:
-        query = query + ["--shuffle"]
+        query = query + [_SHUFFLE_TOKEN]
     history = [query] + [q for q in config.history if q != query]
     config.history = history[:HISTORY_LIMIT]
     config.save()
@@ -100,9 +102,9 @@ def _fetch_history_query(query, shuffle):
     except IndexError:
         raise ValueError("Invalid history index: '{}'".format(history_num))
 
-    history_shuffle = (history_query[-1] == "--shuffle")
+    history_shuffle = (history_query[-1] == _SHUFFLE_TOKEN)
     if history_shuffle:
-        history_query.remove("--shuffle")
+        history_query.remove(_SHUFFLE_TOKEN)
     return history_query, shuffle or history_shuffle
 
 
