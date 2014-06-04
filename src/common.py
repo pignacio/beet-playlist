@@ -111,9 +111,9 @@ def _add_list_parser(subparsers):
 def _add_play_parser(subparsers):
     parser = _get_playlist_subparser(subparsers, "play",
                                      help='Playlist to play')
-    parser.add_argument("--shuffle", action='store_true', default=False,
+    parser.add_argument("-s", "--shuffle", action='store_true', default=False,
                         help='Shuffle the playlist')
-    parser.add_argument("--repeat", action='store_true', default=False,
+    parser.add_argument("-r", "--repeat", action='store_true', default=False,
                         help='Infinite replay the playlist')
     parser.set_defaults(func=_play)
 
