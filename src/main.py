@@ -50,12 +50,9 @@ def add_parsers(subparsers):
     parser = subparsers.add_parser("play_query")
     parser.add_argument('query', nargs="*",
                         help='beets query to play')
-    parser.add_argument('-s', '--shuffle', action='store_true', default=False,
-                        help='Shuffles the query contents')
     parser.add_argument('--history', action='store_true', default=False,
                         help='Shows last played queries')
-    parser.add_argument('-r', '--repeat', action='store_true', default=False,
-                        help='Replays the playlist once its finished')
+    common.add_play_arguments(parser)
     parser.set_defaults(func=play_beets_query)
 
 

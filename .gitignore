@@ -4,3 +4,6 @@
 
 # Python compiled files
 *.pyc
+
+# vim swap files
+*.sw[poq]
