@@ -178,7 +178,7 @@ def mplayer(paths, shuffle=False, repeat=False):
         raise ValueError("No paths supplied to mplayer")
     command = ['mplayer']
     if shuffle:
-        command.append("--shuffle")
+        command.append("-shuffle")
     command.extend(paths)
     while True:
         subprocess.call(command)
