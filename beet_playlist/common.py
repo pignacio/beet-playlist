@@ -14,7 +14,6 @@ import subprocess
 import yaml
 import time
 
-
 DATA_DIR = os.path.join(os.path.expanduser("~"), ".beet-playlist")
 DATA_FILE = os.path.join(DATA_DIR, "data")
 PLAYLISTS_DIR = os.path.join(DATA_DIR, "playlists")
@@ -23,7 +22,6 @@ HISTORY_LIMIT = 20
 
 
 class Playlist(object):
-
     def __init__(self, playlist):
         if playlist is None:
             raise ValueError("Must supply a playlist")
@@ -88,7 +86,9 @@ def list_playlists(playlist):
 
 def _get_playlist_subparser(subparsers, name, **kwargs):
     parser = subparsers.add_parser(name)
-    parser.add_argument("playlist", action='store', type=Playlist,
+    parser.add_argument("playlist",
+                        action='store',
+                        type=Playlist,
                         default=None, **kwargs)
     return parser
 
@@ -102,13 +102,15 @@ def add_parsers(subparsers):
 
 def _add_new_parser(subparsers):
     parser = subparsers.add_parser("new")
-    parser.add_argument("playlist", action='store',
+    parser.add_argument("playlist",
+                        action='store',
                         help='Crate a new playlist')
     parser.set_defaults(func=Playlist.create)
 
 
 def _add_list_parser(subparsers):
-    parser = _get_playlist_subparser(subparsers, "list", nargs='?',
+    parser = _get_playlist_subparser(subparsers, "list",
+                                     nargs='?',
                                      help='List this playlist contents')
     parser.set_defaults(func=list_playlists)
 
@@ -121,9 +123,13 @@ def _add_play_parser(subparsers):
 
 
 def add_play_arguments(parser):
-    parser.add_argument("-s", "--shuffle", action='store_true', default=False,
+    parser.add_argument("-s", "--shuffle",
+                        action='store_true',
+                        default=False,
                         help='Shuffle the tracks')
-    parser.add_argument("-r", "--repeat", action='store_true', default=False,
+    parser.add_argument("-r", "--repeat",
+                        action='store_true',
+                        default=False,
                         help='Replay the tracks in an infinite loop')
 
 
@@ -169,9 +175,7 @@ class _ConfigData(object):
 
     @classmethod
     def _default(cls):
-        return cls(
-            history=[],
-        )
+        return cls(history=[], )
 
 
 def get_config():

@@ -11,7 +11,6 @@ import subprocess
 
 
 class BeetTrack(object):
-
     def __init__(self, artist, album, title, path):
         self.artist = artist
         self.album = album

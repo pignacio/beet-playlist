@@ -120,9 +120,10 @@ def add(playlist, query):
 
 def add_parser(subparsers):
     parser = subparsers.add_parser("add")
-    parser.add_argument("playlist", action='store', type=Playlist,
+    parser.add_argument("playlist",
+                        action='store',
+                        type=Playlist,
                         help='Playlist to add songs to')
-    parser.add_argument('query', nargs="*",
-                        help='beets query to add on')
+    parser.add_argument('query', nargs="*", help='beets query to add on')
 
     parser.set_defaults(func=add)

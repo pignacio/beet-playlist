@@ -53,9 +53,10 @@ def main():
 
 def add_parsers(subparsers):
     parser = subparsers.add_parser("play_query")
-    parser.add_argument('query', nargs="*",
-                        help='beets query to play')
-    parser.add_argument('--history', action='store_true', default=False,
+    parser.add_argument('query', nargs="*", help='beets query to play')
+    parser.add_argument('--history',
+                        action='store_true',
+                        default=False,
                         help='Shows last played queries')
     common.add_play_arguments(parser)
     parser.set_defaults(func=play_beets_query)
@@ -79,7 +80,8 @@ def play_beets_query(query, shuffle=False, history=False, repeat=False):
         for track in tracks:
             logging.info(" - %s", track.path)
         _push_to_history(query, shuffle)
-        common.mplayer([t.path for t in tracks], shuffle=shuffle,
+        common.mplayer([t.path for t in tracks],
+                       shuffle=shuffle,
                        repeat=repeat)
 
 
@@ -114,6 +116,7 @@ def _show_history():
     print("History:")
     for index, query in enumerate(get_config().history):
         print(" {} - {}".format(index + 1, query))
+
 
 if __name__ == "__main__":
     main()
