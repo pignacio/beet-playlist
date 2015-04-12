@@ -1,8 +1,13 @@
+#!/usr/bin/env python
+# encoding: utf-8
 '''
 Created on Mar 16, 2014
 
 @author: ignacio
 '''
+from __future__ import (absolute_import, unicode_literals, division,
+                        print_function)
+
 import logging
 import os
 import subprocess
@@ -43,7 +48,7 @@ class Playlist(object):
         if paths:
             mplayer(paths, shuffle=shuffle, repeat=repeat)
         else:
-            logging.warn("Playlist {} is empty. Not playing".format(self.name))
+            logging.warn("Playlist %s is empty. Not playing", self.name)
 
     @classmethod
     def _get_playlist_dir(cls, playlist):
@@ -73,12 +78,12 @@ class Playlist(object):
 def list_playlists(playlist):
     if playlist is None:
         for playlist in Playlist.list():
-            print "%s - %d tracks" % (playlist.name, len(playlist.contents()))
+            print("%s - %d tracks" % (playlist.name, len(playlist.contents())))
     else:
         contents = playlist.contents()
-        print "Playlist '%s' - %d tracks" % (playlist.name, len(contents))
+        print("Playlist '%s' - %d tracks" % (playlist.name, len(contents)))
         for track in contents:
-            print " - %s" % track
+            print(" - %s" % track)
 
 
 def _get_playlist_subparser(subparsers, name, **kwargs):

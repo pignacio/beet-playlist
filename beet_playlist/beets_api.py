@@ -1,8 +1,12 @@
+#!/usr/bin/env python
+# encoding: utf-8
 '''
 Created on May 4, 2014
 
 @author: ignacio
 '''
+from __future__ import (absolute_import, unicode_literals, division,
+                        print_function)
 import subprocess
 
 

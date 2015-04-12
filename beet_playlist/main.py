@@ -1,11 +1,16 @@
+#!/usr/bin/env python
+# encoding: utf-8
+from __future__ import (absolute_import, unicode_literals, division,
+                        print_function)
+
 from argparse import ArgumentParser
-import common
-import add
 import logging
 import os
 import sys
-from beets_api import run_beet_query
-from common import get_config, HISTORY_LIMIT
+
+from .beets_api import run_beet_query
+from .common import get_config, HISTORY_LIMIT
+from . import add, common
 
 _SHUFFLE_TOKEN = "<SHUFFLED>"
 
@@ -68,7 +73,7 @@ def play_beets_query(query, shuffle=False, history=False, repeat=False):
                 raise
         tracks = run_beet_query(query)
         if not tracks:
-            logging.warn("Query '{}' matched no tracks!".format(query))
+            logging.warn("Query '%s' matched no tracks!", query)
             return
         logging.info("Got %s tracks from query '%s'", len(tracks), query)
         for track in tracks:
@@ -106,9 +111,9 @@ def _fetch_history_query(query, shuffle):
 
 
 def _show_history():
-    print "History:"
+    print("History:")
     for index, query in enumerate(get_config().history):
-        print " {} - {}".format(index + 1, query)
+        print(" {} - {}".format(index + 1, query))
 
 if __name__ == "__main__":
     main()

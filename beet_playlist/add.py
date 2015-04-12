@@ -1,19 +1,25 @@
+#!/usr/bin/env python
+# encoding: utf-8
 '''
 Created on Mar 16, 2014
 
 @author: ignacio
 '''
+from __future__ import (absolute_import, unicode_literals, division,
+                        print_function)
+
 import logging
 import os
 import sys
-from common import Playlist
-from beets_api import run_beet_query
+
+from .common import Playlist
+from .beets_api import run_beet_query
 
 
 def _add(playlist, tracks):
-    print "Adding %s tracks to %s" % (len(tracks), playlist)
+    print("Adding %s tracks to %s" % (len(tracks), playlist))
     for track in tracks:
-        print "Adding: %s" % track
+        print("Adding: %s" % track)
         size = len(playlist.contents())
         fname_bits = ["%06d" % (size + 1), track.artist, track.album,
                       track.title]
@@ -57,11 +63,11 @@ def _get_add_candidates(tracks):
     if len(tracks) == 1:
         return tracks
     for i, track in enumerate(tracks):
-        print "%3s - %s" % (i, track)
-    print "Query matched %d tracks" % len(tracks)
-    print """Select which tracks to add.
+        print("%3s - %s" % (i, track))
+    print("Query matched %d tracks" % len(tracks))
+    print("""Select which tracks to add.
 Some valid examples: ['1','2-3','2,3,6-10,4']
-a/A adds all tracks."""
+a/A adds all tracks.""")
     selection = raw_input("Which tracks should I add?: ")
     indexes = _parse_indexes(selection, len(tracks))
     return [tracks[i] for i in indexes]
@@ -74,13 +80,13 @@ def _confirm(msg):
             return True
         elif resp in ['n', 'N']:
             return False
-        print "Invalid response: '%s'. Try again..." % resp
+        print("Invalid response: '%s'. Try again..." % resp)
 
 
 def _confirm_add(candidates):
-    print "Current selection is:"
+    print("Current selection is:")
     for candidate in candidates:
-        print " - %s" % (candidate)
+        print(" - %s" % (candidate))
     return _confirm("Are you sure you want to add this?")
 
 
@@ -100,7 +106,7 @@ def _interactive_select(tracks):
 
 
 def add(playlist, query):
-    print "add(%s), query: '%s'" % (playlist, query)
+    print("add(%s), query: '%s'" % (playlist, query))
     tracks = run_beet_query(query)
 
     if len(tracks) == 0:
